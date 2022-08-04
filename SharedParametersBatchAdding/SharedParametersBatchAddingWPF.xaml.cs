@@ -12,6 +12,7 @@ namespace SharedParametersBatchAdding
 {
     public partial class SharedParametersBatchAddingWPF : Window
     {
+        DefinitionGroups SharedParametersGroups;
         public string AddParametersSelectedOption;
         public string FilePath;
         ObservableCollection<KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>>> DefinitionGroupxternalDefinitionKVPCollection;
@@ -21,18 +22,21 @@ namespace SharedParametersBatchAdding
         public SharedParametersBatchAddingWPF(DefinitionGroups sharedParametersGroups, ObservableCollection<KeyValuePair<string, BuiltInParameterGroup>> builtInParameterGroupKeyValuePairs)
         {
             InitializeComponent();
+            SharedParametersGroups = sharedParametersGroups;
             //Создание коллекции для вывода в комбобокс выбора группирования
             BuiltInParameterGroupKeyValuePairs = builtInParameterGroupKeyValuePairs;
             comboBox_GroupingParameters.ItemsSource = BuiltInParameterGroupKeyValuePairs;
             if (BuiltInParameterGroupKeyValuePairs.Where(kVP => kVP.Key.Equals("Прочее")).Count() != 0)
             {
-                comboBox_GroupingParameters.SelectedItem = comboBox_GroupingParameters.Items.GetItemAt(BuiltInParameterGroupKeyValuePairs.IndexOf(BuiltInParameterGroupKeyValuePairs.FirstOrDefault(kVP => kVP.Key == "Прочее")));
+                comboBox_GroupingParameters.SelectedItem = comboBox_GroupingParameters.Items
+                    .GetItemAt(BuiltInParameterGroupKeyValuePairs
+                    .IndexOf(BuiltInParameterGroupKeyValuePairs.FirstOrDefault(kVP => kVP.Key == "Прочее")));
             }
             comboBox_GroupingParameters.DisplayMemberPath = "Key";
 
             //Коллекция групп и общих параметро
             DefinitionGroupxternalDefinitionKVPCollection = new ObservableCollection<KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>>>();
-            foreach (DefinitionGroup definitionGroup in sharedParametersGroups)
+            foreach (DefinitionGroup definitionGroup in SharedParametersGroups)
             {
                 List<ExternalDefinition> tmpExternalDefinitionList = new List<ExternalDefinition>();
                 foreach (Definition definition in definitionGroup.Definitions)
@@ -40,7 +44,8 @@ namespace SharedParametersBatchAdding
                     tmpExternalDefinitionList.Add(definition as ExternalDefinition);
                 }
                 ObservableCollection<ExternalDefinition> externalDefinitionCollecrion
-                    = new ObservableCollection<ExternalDefinition>(tmpExternalDefinitionList.OrderBy(ed => ed.Name, new AlphanumComparatorFastString()));
+                    = new ObservableCollection<ExternalDefinition>(tmpExternalDefinitionList
+                    .OrderBy(ed => ed.Name, new AlphanumComparatorFastString()));
 
                 KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>> tmpKeyValuePair
                     = new KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>>(definitionGroup, externalDefinitionCollecrion);
@@ -66,7 +71,8 @@ namespace SharedParametersBatchAdding
         {
             KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>> selectedKeyValuePair = (KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>>)(sender as ListBox).SelectedItem;
             DefinitionGroup definitionGroup = selectedKeyValuePair.Key;
-            ObservableCollection<ExternalDefinition> sharedParametersSelectedDefinitions = DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key == definitionGroup).Value;
+            ObservableCollection<ExternalDefinition> sharedParametersSelectedDefinitions = DefinitionGroupxternalDefinitionKVPCollection
+                .FirstOrDefault(g => g.Key == definitionGroup).Value;
             listBox_SharedParameters.ItemsSource = sharedParametersSelectedDefinitions;
             listBox_SharedParameters.DisplayMemberPath = "Name";
         }
@@ -125,7 +131,9 @@ namespace SharedParametersBatchAdding
             List<ExternalDefinition> selectedExternalDefinitionList = listBox_SharedParameters.SelectedItems.Cast<ExternalDefinition>().ToList();
             foreach (ExternalDefinition selectedExternalDefinition in selectedExternalDefinitionList)
             {
-                KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>> sourseKeyValuePair = DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedExternalDefinition.OwnerGroup.Name);
+                KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>> sourseKeyValuePair 
+                    = DefinitionGroupxternalDefinitionKVPCollection
+                    .FirstOrDefault(g => g.Key.Name == selectedExternalDefinition.OwnerGroup.Name);
                 sourseKeyValuePair.Value.Remove(selectedExternalDefinition);
             }
 
@@ -136,7 +144,8 @@ namespace SharedParametersBatchAdding
                 sharedParametersBatchAddingItem.ExternalDefinitionParam = selectedExternalDefinition;
                 sharedParametersBatchAddingItem.ExternalDefinitionParamGuid = selectedExternalDefinition.GUID;
                 
-                string radioButtonParameterIn = (groupBox_ParameterIn.Content as System.Windows.Controls.Grid).Children.OfType<RadioButton>().FirstOrDefault(rb => rb.IsChecked.Value == true).Name;
+                string radioButtonParameterIn = (groupBox_ParameterIn.Content as System.Windows.Controls.Grid)
+                    .Children.OfType<RadioButton>().FirstOrDefault(rb => rb.IsChecked.Value == true).Name;
                 if (radioButtonParameterIn == "radioButton_InstanceParameter")
                 {
                     sharedParametersBatchAddingItem.AddParameterSelectedOptionParam = true;
@@ -163,15 +172,27 @@ namespace SharedParametersBatchAdding
         {
             if (SharedParametersBatchAddingItemsList.Count != 0)
             {
-                List<SharedParametersBatchAddingItem> selectedSharedParametersBatchAddingItemList = dataGrid_SelectedParametersGroup.SelectedItems.Cast<SharedParametersBatchAddingItem>().ToList();
+                List<SharedParametersBatchAddingItem> selectedSharedParametersBatchAddingItemList 
+                    = dataGrid_SelectedParametersGroup.SelectedItems.Cast<SharedParametersBatchAddingItem>().ToList();
                 foreach(SharedParametersBatchAddingItem selectedSharedParametersBatchAddingItem in selectedSharedParametersBatchAddingItemList)
                 {
                     SharedParametersBatchAddingItemsList.Remove(selectedSharedParametersBatchAddingItem);
                 }
                 foreach (SharedParametersBatchAddingItem selectedSharedParametersBatchAddingItem in selectedSharedParametersBatchAddingItemList)
                 {
-                    DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.Add(selectedSharedParametersBatchAddingItem.ExternalDefinitionParam);
-                    DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.OrderBy(p => p.Name, new AlphanumComparatorFastString());
+                    DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem
+                    .ExternalDefinitionParam.OwnerGroup.Name).Value.Add(selectedSharedParametersBatchAddingItem.ExternalDefinitionParam);
+                    
+                    List<ExternalDefinition> tmpExternalDefinitionListForSorting = DefinitionGroupxternalDefinitionKVPCollection
+                        .FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.Cast<ExternalDefinition>().ToList();
+                    tmpExternalDefinitionListForSorting = tmpExternalDefinitionListForSorting.OrderBy(ed => ed.Name).ToList();
+                    
+                    DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.Clear();
+                    foreach(ExternalDefinition sortedExternalDefinition in tmpExternalDefinitionListForSorting)
+                    {
+                        DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name)
+                            .Value.Add(sortedExternalDefinition);
+                    }
                 }
             }
         }
@@ -184,11 +205,43 @@ namespace SharedParametersBatchAdding
             System.Windows.Forms.DialogResult result = openDialog.ShowDialog();
             if (result == System.Windows.Forms.DialogResult.OK)
             {
+                List<SharedParametersBatchAddingItem> sharedParametersBatchAddingItemList = dataGrid_SelectedParametersGroup.Items.Cast<SharedParametersBatchAddingItem>().ToList();
+                if (sharedParametersBatchAddingItemList.Count != 0)
+                {
+                    
+                    foreach (SharedParametersBatchAddingItem itemInDataGread in sharedParametersBatchAddingItemList)
+                    {
+                        SharedParametersBatchAddingItemsList.Remove(itemInDataGread);
+                    }
+                    foreach (SharedParametersBatchAddingItem itemInDataGread in sharedParametersBatchAddingItemList)
+                    {
+                        DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == itemInDataGread.ExternalDefinitionParam.OwnerGroup.Name)
+                            .Value.Add(itemInDataGread.ExternalDefinitionParam);
+
+                        List<ExternalDefinition> tmpExternalDefinitionListForSorting = DefinitionGroupxternalDefinitionKVPCollection
+                            .FirstOrDefault(g => g.Key.Name == itemInDataGread.ExternalDefinitionParam.OwnerGroup.Name).Value.Cast<ExternalDefinition>().ToList();
+                        
+                        tmpExternalDefinitionListForSorting = tmpExternalDefinitionListForSorting.OrderBy(ed => ed.Name).ToList();
+                        DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == itemInDataGread.ExternalDefinitionParam.OwnerGroup.Name).Value.Clear();
+                        foreach (ExternalDefinition sortedExternalDefinition in tmpExternalDefinitionListForSorting)
+                        {
+                            DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == itemInDataGread.ExternalDefinitionParam.OwnerGroup.Name).Value.Add(sortedExternalDefinition);
+                        }
+                    }
+                }
+
                 string jsonFilePath = openDialog.FileName;
                 SharedParametersBatchAddingSettings sharedParametersBatchAddingSettings = new SharedParametersBatchAddingSettings();
-                //SharedParametersBatchAddingItemsList = sharedParametersBatchAddingSettings.GetSettings(SharedParametersGroups, jsonFilePath);
-                //dataGrid_SelectedParametersGroup.ItemsSource = SharedParametersBatchAddingItemsList;
+                SharedParametersBatchAddingItemsList = sharedParametersBatchAddingSettings.GetSettings(SharedParametersGroups, jsonFilePath);
+                dataGrid_SelectedParametersGroup.ItemsSource = SharedParametersBatchAddingItemsList;
+                foreach (SharedParametersBatchAddingItem item in SharedParametersBatchAddingItemsList)
+                {
+                    KeyValuePair<DefinitionGroup, ObservableCollection<ExternalDefinition>> sourseKeyValuePair
+                        = DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == item.ExternalDefinitionParam.OwnerGroup.Name);
+                    sourseKeyValuePair.Value.Remove(item.ExternalDefinitionParam);
+                }
             }
+
         }
 
         //Сохранить
