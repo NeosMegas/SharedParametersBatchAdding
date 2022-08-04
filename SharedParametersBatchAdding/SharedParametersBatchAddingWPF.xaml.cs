@@ -233,6 +233,16 @@ namespace SharedParametersBatchAdding
                 string jsonFilePath = openDialog.FileName;
                 SharedParametersBatchAddingSettings sharedParametersBatchAddingSettings = new SharedParametersBatchAddingSettings();
                 SharedParametersBatchAddingItemsList = sharedParametersBatchAddingSettings.GetSettings(SharedParametersGroups, jsonFilePath);
+                
+                ObservableCollection<SharedParametersBatchAddingItem> tmpSharedParametersBatchAddingItemsList = new ObservableCollection<SharedParametersBatchAddingItem>(SharedParametersBatchAddingItemsList);
+                foreach (SharedParametersBatchAddingItem item in tmpSharedParametersBatchAddingItemsList)
+                {
+                    if(item.ExternalDefinitionParam == null)
+                    {
+                        SharedParametersBatchAddingItemsList.Remove(item);
+                    }
+                }
+
                 dataGrid_SelectedParametersGroup.ItemsSource = SharedParametersBatchAddingItemsList;
                 foreach (SharedParametersBatchAddingItem item in SharedParametersBatchAddingItemsList)
                 {
@@ -241,7 +251,6 @@ namespace SharedParametersBatchAdding
                     sourseKeyValuePair.Value.Remove(item.ExternalDefinitionParam);
                 }
             }
-
         }
 
         //Сохранить
