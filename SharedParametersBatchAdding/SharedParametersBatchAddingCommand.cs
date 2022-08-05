@@ -22,8 +22,10 @@ namespace SharedParametersBatchAdding
                 return Result.Cancelled;
             }
             DefinitionGroups sharedParametersGroups = defFile.Groups;
+            List<BuiltInParameterGroup> builtInParameterGroup = GetBuiltInParameterGroup();
+
             ObservableCollection<KeyValuePair<string, BuiltInParameterGroup>> builtInParameterGroupKeyValuePairs = new ObservableCollection<KeyValuePair<string, BuiltInParameterGroup>>();
-            foreach (BuiltInParameterGroup item in (BuiltInParameterGroup[])Enum.GetValues(typeof(BuiltInParameterGroup)))
+            foreach (BuiltInParameterGroup item in builtInParameterGroup)
             {
                 try
                 {
@@ -199,6 +201,57 @@ namespace SharedParametersBatchAdding
                 }
             }
             return Result.Succeeded;
+        }
+
+        private static List<BuiltInParameterGroup> GetBuiltInParameterGroup()
+        {
+            List<BuiltInParameterGroup> builtInParameterGroup = new List<BuiltInParameterGroup>();
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ANALYSIS_RESULTS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ANALYTICAL_ALIGNMENT);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ANALYTICAL_MODEL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_CONSTRAINTS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_CONSTRUCTION);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_DATA);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_GEOMETRY);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_DIVISION_GEOMETRY);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_AELECTRICAL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_CIRCUITING);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_LIGHTING);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_LOADS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ENERGY_ANALYSIS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_FIRE_PROTECTION);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_FORCES);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_GENERAL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_GRAPHICS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_GREEN_BUILDING);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_IDENTITY_DATA);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_IFC);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_REBAR_SYSTEM_LAYERS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_MATERIALS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_MECHANICAL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_MECHANICAL_AIRFLOW);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_MECHANICAL_LOADS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_ADSK_MODEL_PROPERTIES);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_MOMENTS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.INVALID);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_OVERALL_LEGEND);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_PHASING);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_LIGHT_PHOTOMETRICS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_PLUMBING);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_PRIMARY_END);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_REBAR_ARRAY);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_RELEASES_MEMBER_FORCES);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_SECONDARY_END);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_SECONDARY_END);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_SEGMENTS_FITTINGS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_SLAB_SHAPE_EDIT);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_STRUCTURAL);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_STRUCTURAL_ANALYSIS);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_TEXT);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_TITLE);
+            builtInParameterGroup.Add(BuiltInParameterGroup.PG_VISIBILITY);
+            return builtInParameterGroup;
         }
     }
 }
