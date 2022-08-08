@@ -267,6 +267,38 @@ namespace SharedParametersBatchAdding
             }
         }
 
+        private void dataGrid_SelectedParametersGroup_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Delete)
+            {
+                if (SharedParametersBatchAddingItemsList.Count != 0)
+                {
+                    List<SharedParametersBatchAddingItem> selectedSharedParametersBatchAddingItemList
+                        = dataGrid_SelectedParametersGroup.SelectedItems.Cast<SharedParametersBatchAddingItem>().ToList();
+                    foreach (SharedParametersBatchAddingItem selectedSharedParametersBatchAddingItem in selectedSharedParametersBatchAddingItemList)
+                    {
+                        SharedParametersBatchAddingItemsList.Remove(selectedSharedParametersBatchAddingItem);
+                    }
+                    foreach (SharedParametersBatchAddingItem selectedSharedParametersBatchAddingItem in selectedSharedParametersBatchAddingItemList)
+                    {
+                        DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem
+                        .ExternalDefinitionParam.OwnerGroup.Name).Value.Add(selectedSharedParametersBatchAddingItem.ExternalDefinitionParam);
+
+                        List<ExternalDefinition> tmpExternalDefinitionListForSorting = DefinitionGroupxternalDefinitionKVPCollection
+                            .FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.Cast<ExternalDefinition>().ToList();
+                        tmpExternalDefinitionListForSorting = tmpExternalDefinitionListForSorting.OrderBy(ed => ed.Name).ToList();
+
+                        DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name).Value.Clear();
+                        foreach (ExternalDefinition sortedExternalDefinition in tmpExternalDefinitionListForSorting)
+                        {
+                            DefinitionGroupxternalDefinitionKVPCollection.FirstOrDefault(g => g.Key.Name == selectedSharedParametersBatchAddingItem.ExternalDefinitionParam.OwnerGroup.Name)
+                                .Value.Add(sortedExternalDefinition);
+                        }
+                    }
+                }
+            }
+        }
+
         private void btn_Ok_Click(object sender, RoutedEventArgs e)
         {
             AddParametersSelectedOption = (groupBox_AddParameters.Content as System.Windows.Controls.Grid)

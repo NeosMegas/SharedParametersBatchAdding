@@ -66,7 +66,7 @@
         </GroupBox>
         <DataGrid x:Name="dataGrid_SelectedParametersGroup" Margin="10,170,10,50" 
                   Grid.Row="1" Grid.ColumnSpan="2" CanUserAddRows="False"
-                  AutoGenerateColumns="False" SelectionMode="Extended">
+                  AutoGenerateColumns="False" SelectionMode="Extended" KeyDown="dataGrid_SelectedParametersGroup_KeyDown" CanUserDeleteRows="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Параметр" Width="Auto" IsReadOnly="True"  Binding="{Binding Path=ExternalDefinitionParam.Name}" />
                 <DataGridCheckBoxColumn Header="Экземпляр" Width="80" Binding="{Binding AddParameterSelectedOptionParam, UpdateSourceTrigger=PropertyChanged}" />
