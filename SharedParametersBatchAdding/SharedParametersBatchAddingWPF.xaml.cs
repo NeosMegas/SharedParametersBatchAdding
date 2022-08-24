@@ -75,6 +75,10 @@ namespace SharedParametersBatchAdding
                 .FirstOrDefault(g => g.Key == definitionGroup).Value;
             listBox_SharedParameters.ItemsSource = sharedParametersSelectedDefinitions;
             listBox_SharedParameters.DisplayMemberPath = "Name";
+            if(listBox_SharedParameters.Items.Count != 0)
+            {
+                listBox_SharedParameters.ScrollIntoView(listBox_SharedParameters.Items.GetItemAt(0));
+            }
         }
 
         //Изменение принципа здания параметров (семейство, семейства, папка)
