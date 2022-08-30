@@ -214,7 +214,6 @@ namespace SharedParametersBatchAdding
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_DATA);
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_GEOMETRY);
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_DIVISION_GEOMETRY);
-            tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_AELECTRICAL);
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_CIRCUITING);
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_LIGHTING);
             tmpBuiltInParameterGroup.Add(BuiltInParameterGroup.PG_ELECTRICAL_LOADS);
