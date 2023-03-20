@@ -22,6 +22,7 @@ namespace SharedParametersBatchAdding
             using (StreamWriter sw = new StreamWriter(jsonFilePath))
             using (JsonWriter writer = new JsonTextWriter(sw))
             {
+                serializer.Formatting = Formatting.Indented;
                 serializer.Serialize(writer, sharedParametersBatchAddingItems);
             }
         }
