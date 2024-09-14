@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+	<AddIn Type="Application">
+		<Name>SharedParametersBatchAdding</Name>
+		<Assembly>SharedParametersBatchAdding\SharedParametersBatchAdding.dll</Assembly>
+		<ClientId>977c5e90-a349-4374-8839-cd5dbaeba952</ClientId>
+		<FullClassName>SharedParametersBatchAdding.SharedParametersBatchAddingApp</FullClassName>
+		<VendorId>Misharev Evgeny</VendorId>
+		<VendorDescription>MisharevEA@gmail.com</VendorDescription>
+	</AddIn>
+</RevitAddIns>

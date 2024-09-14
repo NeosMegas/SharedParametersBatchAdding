@@ -84,6 +84,10 @@ namespace SharedParametersBatchAdding
                                 {
                                     try
                                     {
+                                        // Added 2024.09.14 to avoid Autodesk.Revit.Exceptions InvalidOperationException caused by "no valid family type"
+                                        if (doc.FamilyManager.Types.Size == 0)
+                                            doc.FamilyManager.NewType(doc.Title ?? "default");
+                                        //
                                         doc.FamilyManager.SetFormula(fp, sharedParameterItem.FormulaParam);
                                     }
                                     catch
@@ -98,6 +102,10 @@ namespace SharedParametersBatchAdding
                                 {
                                     try
                                     {
+                                        // Added 2024.09.14 to avoid Autodesk.Revit.Exceptions InvalidOperationException caused by "no valid family type"
+                                        if (doc.FamilyManager.Types.Size == 0)
+                                            doc.FamilyManager.NewType(doc.Title ?? "default");
+                                        //
                                         doc.FamilyManager.SetFormula(fPars.Where(p => p.GUID == sharedParameterItem.ExternalDefinitionParam.GUID).ToList().First(), sharedParameterItem.FormulaParam);
                                     }
                                     catch
